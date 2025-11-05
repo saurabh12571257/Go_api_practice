@@ -2,7 +2,5 @@ env: "dev"
 
 storage_path: "storage/storage.db"
 
-config_path: "config/local.yaml"
-
 http_server:
   address: "localhost:8080"
