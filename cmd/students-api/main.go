@@ -13,13 +13,21 @@ import (
 
 	"github.com/saurabh/students-api/internal/config"
 	student "github.com/saurabh/students-api/internal/http/handlers/students"
+	"github.com/saurabh/students-api/internal/storage/sqlite"
 )
 
 func main() {
 	cfg := config.MustLoad()
 
+	storage, err := sqlite.New(cfg)
+	if err != nil {
+		log.Fatalf("Failed to initialize storage: %v", err)
+	}
+
+	slog.Info("strorage initialized", slog.String("env", cfg.Env), slog.String("version", "1.0.0"))
+
 	router := http.NewServeMux()
-	router.HandleFunc("/api/students", student.New())
+	router.HandleFunc("/api/students", student.New(storage))
 
 	server := &http.Server{
 		Addr:    cfg.Addr,
