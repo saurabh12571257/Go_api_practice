@@ -14,6 +14,7 @@ import (
 	"github.com/saurabh/students-api/internal/config"
 	student "github.com/saurabh/students-api/internal/http/handlers/students"
 	"github.com/saurabh/students-api/internal/storage/sqlite"
+	
 )
 
 func main() {
@@ -27,7 +28,8 @@ func main() {
 	slog.Info("strorage initialized", slog.String("env", cfg.Env), slog.String("version", "1.0.0"))
 
 	router := http.NewServeMux()
-	router.HandleFunc("/api/students", student.New(storage))
+	router.HandleFunc("POST /api/students", student.New(storage))
+	router.HandleFunc("GET /api/students/{id}", student.GetById(storage))
 
 	server := &http.Server{
 		Addr:    cfg.Addr,
