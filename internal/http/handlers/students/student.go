@@ -13,7 +13,6 @@ import (
 	"github.com/saurabh/students-api/internal/storage"
 	"github.com/saurabh/students-api/internal/types"
 	"github.com/saurabh/students-api/internal/utils/response"
-
 )
 
 func New(storage storage.Storage) http.HandlerFunc {
@@ -134,12 +133,14 @@ func DeleteById(storage storage.Storage) http.HandlerFunc {
 			return
 		}
 
-		err = storage.DeleteById(intId)
+		deleteId, err := storage.DeleteById(intId)
+
+		slog.Info("user deleted ", "id", deleteId)
 		if err != nil {
 			response.WriteJson(w, http.StatusInternalServerError, response.GeneralError(fmt.Errorf("failed to delete student: %w", err)))
 			return
 		}
 
-		response.WriteJson(w, http.StatusOK, map[string]string{"status": "deleted"})
+		response.WriteJson(w, http.StatusOK, map[string]int64{"status": deleteId})
 	}
 }
