@@ -14,7 +14,6 @@ import (
 	"github.com/saurabh/students-api/internal/config"
 	student "github.com/saurabh/students-api/internal/http/handlers/students"
 	"github.com/saurabh/students-api/internal/storage/sqlite"
-	
 )
 
 func main() {
@@ -30,6 +29,8 @@ func main() {
 	router := http.NewServeMux()
 	router.HandleFunc("POST /api/students", student.New(storage))
 	router.HandleFunc("GET /api/students/{id}", student.GetById(storage))
+	router.HandleFunc("PUT /api/students/{id}", student.UpdateById(storage))
+	router.HandleFunc("DELETE /api/students/{id}", student.DeleteById(storage))
 
 	server := &http.Server{
 		Addr:    cfg.Addr,
